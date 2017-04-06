@@ -2,3 +2,6 @@
 /TestPostMessageMulitpart/bin
 /TestPostMessageMulitpart/packages
 /TestPostMessageMulitpart/.vs/TestPostMessageMulitpart/v15/*.suo
+/DownloadWebPortal/bin
+/DownloadWebPortal/obj
+/DownloadWebPortal/*.user
