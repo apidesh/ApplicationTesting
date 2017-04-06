@@ -5,3 +5,8 @@
 /DownloadWebPortal/bin
 /DownloadWebPortal/obj
 /DownloadWebPortal/*.user
+/TestDownloadWebAPIs/packages
+/TestDownloadWebAPIs/bin
+/TestDownloadWebAPIs/obj
+/TestDownloadWebAPIs/.vs/TestDownloadWebAPIs/v15
+/TestDownloadWebAPIs/.vs/config
