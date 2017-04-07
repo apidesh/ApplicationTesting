@@ -82,10 +82,12 @@ namespace TestPostMessageMulitpart
                         content.Add(new StreamContent(filestream), "file", fileName);
                     }
 
-                    client.DefaultRequestHeaders.Add("ENTERPRISE_GUID", "7E01C680-9C26-4268-A183-407BB2B2D7B7");
-                    client.DefaultRequestHeaders.Add("ENTERPRISE_ID", "Hello-ID");
-                    client.DefaultRequestHeaders.Add("MODULE", "TestUpload");
-
+                    // client.DefaultRequestHeaders.Add("ENTERPRISE_GUID", "7E01C680-9C26-4268-A183-407BB2B2D7B7");
+                    // client.DefaultRequestHeaders.Add("ENTERPRISE_ID", "Hello-ID");
+                    // client.DefaultRequestHeaders.Add("MODULE", "TestUpload");
+                    content.Add(new StringContent("7E01C680-9C26-4268-A183-407BB2B2D7B7"), "enterprise_guid");
+                    content.Add(new StringContent("Hello-ID"), "enterprise_id");
+                    content.Add(new StringContent("OpenAccount"), "module");
                     try
                     {
                         using (var message = await client.PostAsync("http://localhost:18002/v1/upload", content))
