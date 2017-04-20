@@ -108,7 +108,7 @@ namespace TestPostMessageMulitpart
                     content.Add(new StringContent("OpenAccount"), "module");
                     try
                     {
-                        using (var message = await client.PostAsync("http://localhost:18002/v1/upload", content))
+                        using (var message = await client.PostAsync("http://localhost:18002/common/fileupload/upload", content))
                         {
                             var input = await message.Content.ReadAsStringAsync();
                             return input;

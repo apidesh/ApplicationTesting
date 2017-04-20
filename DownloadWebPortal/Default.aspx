@@ -12,14 +12,14 @@
             <p>
                 Confirmation #1</p>
             <p>
-                <a class="btn btn-default" href="http://localhost:18002/v1/downloadcontent?id=F721028C-C039-40A1-8E49-0D2CD53CEA0F">Download#1 &raquo;</a>
+                <a class="btn btn-default" href="http://localhost:18002/common/filedownload/downloadcontent?id=F3EEDEF5-62FB-4CAB-BC77-2CB8583CBFC5">Download#1 &raquo;</a>
             </p>
              <p>
                 Confirmation #2
 
             </p>
             <p>
-                <a class="btn btn-default" href="http://localhost:18002/v1/downloadcontent?id=11C5D984-C9AC-45A1-8286-8E6599B19F30">Download#2 &raquo;</a>
+                <a class="btn btn-default" href="http://localhost:18002/common/filedownload/downloadcontent?id=85B9999E-ECF2-45AB-834B-DA697D267E62">Download#2 &raquo;</a>
             </p>
            
         </div>
@@ -34,14 +34,14 @@
             <p>
                 View image #1</p>
             <p>
-                <img src="http://localhost:18002/v1/downloadstream?id=F721028C-C039-40A1-8E49-0D2CD53CEA0F" height="250" width="350" />
+                <img src="http://localhost:18002/common/filedownload/downloadstream?id=F3EEDEF5-62FB-4CAB-BC77-2CB8583CBFC5" height="250" width="350" />
             </p>
              <p>
                 View image #2
 
             </p>
             <p>
-                <img src="http://localhost:18002/v1/downloadstream?id=11C5D984-C9AC-45A1-8286-8E6599B19F30" height="250" width="350" />
+                <img src="http://localhost:18002/common/filedownload/downloadstream?id=85B9999E-ECF2-45AB-834B-DA697D267E62" height="250" width="350" />
             </p>
            
         </div>
