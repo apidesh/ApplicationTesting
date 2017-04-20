@@ -62,6 +62,24 @@ namespace TestPostMessageMulitpart
                             Console.WriteLine("Error => " + e.Message);
                         }
                     }
+                    else if (action == "uploadtemp")
+                    {
+                        try
+                        {
+                            Stopwatch st = new Stopwatch();
+                            st.Start();
+                            Console.WriteLine("Begin => " + action);
+                            var taskUpload = UploadTempFile();
+                            taskUpload.Wait();
+                            st.Stop();
+                            Console.WriteLine("End => " + action + " Usage Total Seconds => " + TimeSpan.FromMilliseconds(st.ElapsedMilliseconds).TotalSeconds);
+                            Console.WriteLine("Results => " + JsonHelper.FormatJson(taskUpload.Result));
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Error => " + e.Message);
+                        }
+                    }
                 }
             }
         }
@@ -91,6 +109,45 @@ namespace TestPostMessageMulitpart
                     try
                     {
                         using (var message = await client.PostAsync("http://localhost:18002/v1/upload", content))
+                        {
+                            var input = await message.Content.ReadAsStringAsync();
+                            return input;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        public static async Task<string> UploadTempFile()
+        {
+            using (var client = new HttpClient())
+            {
+                using (var content = new MultipartFormDataContent())
+                {
+                    var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                    var files = new List<string> { Path.Combine(rootPath, "DSC04157.JPG"), Path.Combine(rootPath, "DSC04158.JPG") };
+
+                    foreach (var file in files)
+                    {
+                        var filestream = new FileStream(file, FileMode.Open);
+                        var fileName = Path.GetFileName(file);
+                        content.Add(new StreamContent(filestream), "file", fileName);
+                    }
+
+                    // client.DefaultRequestHeaders.Add("ENTERPRISE_GUID", "7E01C680-9C26-4268-A183-407BB2B2D7B7");
+                    client.DefaultRequestHeaders.Add("enterprise_id", "GMO-002");
+                    client.DefaultRequestHeaders.Add("api_key", "gmo-002");
+                    //  content.Add(new StringContent("7E01C680-9C26-4268-A183-407BB2B2D7B7"), "enterprise_guid");
+                    //   content.Add(new StringContent("gmo-002"), "enterprise_id");
+                    //   content.Add(new StringContent("OpenAccount"), "module");
+
+                    try
+                    {
+                        using (var message = await client.PostAsync("http://localhost:18002/common/fileuploadtemp/uploadtemp", content))//"http://localhost:18001/common/fileuploadtemp/uploadtemp", content))
                         {
                             var input = await message.Content.ReadAsStringAsync();
                             return input;
