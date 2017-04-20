@@ -67,7 +67,9 @@ namespace TestPostMessageMulitpart
         {
             //string id = "E80A64E1-CCCD-42C4-9DD3-AEDEB441F2A1";
             string id = "11C5D984-C9AC-45A1-8286-8E6599B19F30";
-            var path = @"C:\BrokerFiles\TestDownload";
+            // var path = @"C:\BrokerFiles\TestDownload";
+
+            var path = @"~/App_Data/TempFiles";
             var respond = new HttpResponseMessage();
             if (!Directory.Exists(path))
             {
