@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Net;
 using static System.Net.Mime.MediaTypeNames;
 using System.Reflection;
+using NRI.FileManager.Models;
 
 namespace TestPostMessageMulitpart
 {
@@ -80,6 +81,24 @@ namespace TestPostMessageMulitpart
                             Console.WriteLine("Error => " + e.Message);
                         }
                     }
+                    else if (action == "copytempfile")
+                    {
+                        try
+                        {
+                            Stopwatch st = new Stopwatch();
+                            st.Start();
+                            Console.WriteLine("Begin => " + action);
+                            var taskUpload = CopyTempFile();
+                            taskUpload.Wait();
+                            st.Stop();
+                            Console.WriteLine("End => " + action + " Usage Total Seconds => " + TimeSpan.FromMilliseconds(st.ElapsedMilliseconds).TotalSeconds);
+                            Console.WriteLine("Results => " + JsonHelper.FormatJson(taskUpload.Result));
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Error => " + e.Message);
+                        }
+                    }
                 }
             }
         }
@@ -104,7 +123,7 @@ namespace TestPostMessageMulitpart
                     // client.DefaultRequestHeaders.Add("ENTERPRISE_ID", "Hello-ID");
                     // client.DefaultRequestHeaders.Add("MODULE", "TestUpload");
                     content.Add(new StringContent("7E01C680-9C26-4268-A183-407BB2B2D7B7"), "enterprise_guid");
-                    content.Add(new StringContent("Hello-ID"), "enterprise_id");
+                    content.Add(new StringContent("GMO-002"), "enterprise_id");
                     content.Add(new StringContent("OpenAccount"), "module");
                     try
                     {
@@ -138,16 +157,12 @@ namespace TestPostMessageMulitpart
                         content.Add(new StreamContent(filestream), "file", fileName);
                     }
 
-                    // client.DefaultRequestHeaders.Add("ENTERPRISE_GUID", "7E01C680-9C26-4268-A183-407BB2B2D7B7");
                     client.DefaultRequestHeaders.Add("enterprise_id", "GMO-002");
                     client.DefaultRequestHeaders.Add("api_key", "gmo-002");
-                    //  content.Add(new StringContent("7E01C680-9C26-4268-A183-407BB2B2D7B7"), "enterprise_guid");
-                    //   content.Add(new StringContent("gmo-002"), "enterprise_id");
-                    //   content.Add(new StringContent("OpenAccount"), "module");
 
                     try
                     {
-                        using (var message = await client.PostAsync("http://localhost:18002/common/fileuploadtemp/uploadtemp", content))//"http://localhost:18001/common/fileuploadtemp/uploadtemp", content))
+                        using (var message = await client.PostAsync("http://localhost:18001/cm/tempfileupload/uploads", content))
                         {
                             var input = await message.Content.ReadAsStringAsync();
                             return input;
@@ -157,6 +172,37 @@ namespace TestPostMessageMulitpart
                     {
                         throw ex;
                     }
+                }
+            }
+        }
+
+        public static async Task<string> CopyTempFile()
+        {
+            string enterpriseId = "GMO-002";
+            string module = "OpenAccount";
+            Guid enterpriseGUID = Guid.Parse("7E01C680-9C26-4268-A183-407BB2B2D7B7");
+            string refCode = "9841F587-79BF-432E-AA92-EDFE458F0887";
+            using (var client = new HttpClient())
+            {
+                var model = new UploadTempItem
+                {
+                    EnterpriseGUID = enterpriseGUID,
+                    EnterpriseID = enterpriseId,
+                    RefCode = refCode,
+                    Module = module
+                };
+
+                string json = JsonConvert.SerializeObject(model);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                try
+                {
+                    var message = await client.PostAsync("http://localhost:18002/common/fileupload/copytempfile", content);
+                    var input = await message.Content.ReadAsStringAsync();
+                    return input;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
             }
         }
