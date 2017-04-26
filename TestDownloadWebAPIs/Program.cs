@@ -65,38 +65,39 @@ namespace TestPostMessageMulitpart
 
         public static async Task<HttpResponseMessage> DownloadFileStream()
         {
-            //string id = "E80A64E1-CCCD-42C4-9DD3-AEDEB441F2A1";
-            string id = "11C5D984-C9AC-45A1-8286-8E6599B19F30";
-            // var path = @"C:\BrokerFiles\TestDownload";
+            string id = "1e5e55be-8cae-41c8-be62-24330cae1b66";
 
-            var path = @"~/App_Data/TempFiles";
+            var path = @"C:\\Temp\\";
             var respond = new HttpResponseMessage();
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            var url = $"http://localhost:18002/v1/downloadstream?id=" + id;
+            var url = $"http://localhost:18002/common/filedownload/downloadstream?id=" + id;
             using (HttpClient client = new HttpClient())
             {
                 using (HttpResponseMessage response = await client.GetAsync(url))
                 {
                     using (HttpContent content = response.Content)
                     {
-                        var filename = content.Headers.GetValues("content-disposition").ToArray();
-                        var fileExtension = filename.First().Split(';')[1].Split('=')[1];
-
-                        var filePath = Path.Combine(path, $"{Guid.NewGuid().ToString("N")}{Path.GetExtension(fileExtension)}");
-                        Console.WriteLine("Downloaded File => " + filePath);
-                        var byteResult = await content.ReadAsByteArrayAsync();
-                        using (var ms = new MemoryStream(byteResult))
+                        if (content.Headers.Contains("content-disposition"))
                         {
-                            ms.Position = 0;
-                            using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                            var filename = content.Headers.GetValues("content-disposition")?.ToArray();
+                            var fileExtension = WebUtility.UrlDecode(filename.First().Split(';')[1].Split('=')[1]);
+
+                            var filePath = Path.Combine(path, $"{Guid.NewGuid().ToString("N")}{Path.GetExtension(fileExtension)}");
+                            Console.WriteLine("Downloaded File => " + filePath);
+                            var byteResult = await content.ReadAsByteArrayAsync();
+                            using (var ms = new MemoryStream(byteResult))
                             {
-                                ms.CopyTo(fs);
-                                fs.Close();
+                                ms.Position = 0;
+                                using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                                {
+                                    ms.CopyTo(fs);
+                                    fs.Close();
+                                }
+                                ms.Close();
                             }
-                            ms.Close();
                         }
                     }
                     respond.StatusCode = response.StatusCode;

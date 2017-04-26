@@ -118,10 +118,6 @@ namespace TestPostMessageMulitpart
                         var fileName = Path.GetFileName(file);
                         content.Add(new StreamContent(filestream), "file", fileName);
                     }
-
-                    // client.DefaultRequestHeaders.Add("ENTERPRISE_GUID", "7E01C680-9C26-4268-A183-407BB2B2D7B7");
-                    // client.DefaultRequestHeaders.Add("ENTERPRISE_ID", "Hello-ID");
-                    // client.DefaultRequestHeaders.Add("MODULE", "TestUpload");
                     content.Add(new StringContent("7E01C680-9C26-4268-A183-407BB2B2D7B7"), "enterprise_guid");
                     content.Add(new StringContent("GMO-002"), "enterprise_id");
                     content.Add(new StringContent("OpenAccount"), "module");
