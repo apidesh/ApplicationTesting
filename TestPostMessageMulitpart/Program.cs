@@ -110,13 +110,13 @@ namespace TestPostMessageMulitpart
                 using (var content = new MultipartFormDataContent())
                 {
                     var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                    var files = new List<string> { Path.Combine(rootPath, "DSC04157.JPG"), Path.Combine(rootPath, "DSC04158.JPG") };
+                    var files = new List<string> { Path.Combine(rootPath, "รูปภาษาไทย  มีช่องว่าง.JPG"), Path.Combine(rootPath, "รูปภาษาไทย.JPG") };
 
                     foreach (var file in files)
                     {
                         var filestream = new FileStream(file, FileMode.Open);
                         var fileName = Path.GetFileName(file);
-                        content.Add(new StreamContent(filestream), "file", fileName);
+                        content.Add(new StreamContent(filestream), "file", WebUtility.UrlEncode(fileName));
                     }
                     content.Add(new StringContent("7E01C680-9C26-4268-A183-407BB2B2D7B7"), "enterprise_guid");
                     content.Add(new StringContent("GMO-002"), "enterprise_id");
@@ -144,7 +144,7 @@ namespace TestPostMessageMulitpart
                 using (var content = new MultipartFormDataContent())
                 {
                     var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                    var files = new List<string> { Path.Combine(rootPath, "DSC04157.JPG"), Path.Combine(rootPath, "DSC04158.JPG") };
+                    var files = new List<string> { Path.Combine(rootPath, "รูปภาษาไทย  มีช่องว่าง.JPG"), Path.Combine(rootPath, "รูปภาษาไทย.JPG") };
 
                     foreach (var file in files)
                     {
@@ -158,7 +158,8 @@ namespace TestPostMessageMulitpart
 
                     try
                     {
-                        using (var message = await client.PostAsync("http://localhost:18001/cm/tempfileupload/uploads", content))
+                        // using (var message = await client.PostAsync("http://localhost:18001/cm/tempfileupload/uploads", content))
+                        using (var message = await client.PostAsync("http://localhost:18002/common/fileuploadtemp/uploadtemp", content))
                         {
                             var input = await message.Content.ReadAsStringAsync();
                             return input;
